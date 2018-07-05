@@ -21,13 +21,13 @@ module.exports = merge(webpackBaseConf, {
       minChunks: 1,
       name: "vendor",
       cacheGroups: {
-        vendor: {
-          test: /node_modules\//,
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
           chunks: "all",
-          name: "vendor"//utils.assetsPath("vendor"),
+          name: "vendors"//utils.assetsPath("vendor"),
         },
         common: {
-          test: /modules\//,
+          test: /[\\/]modules[\\/]/,
           chunks: "all",
           name: "common"
         }

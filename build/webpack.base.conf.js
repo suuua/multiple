@@ -32,7 +32,7 @@ utils.interatorFolderFile(HTML_FLOADER, (name, dir) => {
 // 生成html模板文件
 console.log(entryMap, htmlFile);
 Object.keys(htmlFile).forEach(name => {
-  let chunks = [/*utils.assetsPath("vendor")*/"vendor"];
+  let chunks = [/*utils.assetsPath("vendor")*/"runtime", "vendors", "common"];
   let filename = path.relative(HTML_FLOADER, path.resolve(htmlFile[name]));
   let appChunk = path.posix.join(...path.relative(HTML_FLOADER, htmlFile[name]).replace(allowHtmlFileExt, "").split(path.sep));
 
