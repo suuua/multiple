@@ -1,11 +1,11 @@
-let path = require('path');
-let webpack = require('webpack');
-let utils = require('./utils.js');
-let config = require('../config/index.js');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const utils = require('./utils.js');
+const config = require('../config/index.js');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-let entryMap = {};
+const entryMap = {};
 const SOURCE = utils.resolve('../src/');
 const WEBPACK_ENTRY_FLOADER_NAME = "entry";
 const WEBPACK_ENTRY_FLOADER = path.resolve(SOURCE, "./" + WEBPACK_ENTRY_FLOADER_NAME);
@@ -101,25 +101,6 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath("img/[name].[hash:7].[ext]")
         }
-      }, {
-        test: /src.+\.less$/,
-        loader: [{
-          loader: "style-loader"
-        }, {
-          loader: "css-loader"
-        }, {
-          loader: "less-loader"
-        }]
-      }, {
-        test: /src.+\.css$/,
-        use: [{
-          loader: "style-loader"
-        }, {
-          loader: "css-loader",
-          options: {
-            minimize: true,
-          }
-        }]
       }, { 
         test: /\.ejs$/, 
         loader: "ejs-loader",

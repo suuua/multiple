@@ -1,25 +1,29 @@
-let path = require('path');
-let merge = require('webpack-merge');
-let config = require('../config/index.js');
-let utils = require('./utils.js');
-let webpack = require('webpack');
-let webpackBaseConf = require('./webpack.base.conf.js');
-let CopyWebpackPlugin = require('copy-webpack-plugin');
-let BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const path = require('path');
+const merge = require('webpack-merge');
+const config = require('../config/index.js');
+const utils = require('./utils.js');
+const webpack = require('webpack');
+const webpackBaseConf = require('./webpack.base.conf.js');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = merge(webpackBaseConf, {
   mode: "production",
   output: {
     filename: utils.assetsPath("js/[name].[chunkhash].js"),
     chunkFilename: utils.assetsPath("js/[name].[chunkhash].js"),
-    publicPath: config.build.assetsPublicPath
+  },
+  module: {
+    rules: utils.styleLoaders({ sourceMap: false, usePostCSS: false, extract: true })
   },
   optimization: {
+    runtimeChunk: "single",
     splitChunks: {
-      chunks: 'initial',
+      chunks: 'all',
       minSize: 0,
       minChunks: 1,
-      name: "vendor",
+      name: true,
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -35,7 +39,6 @@ module.exports = merge(webpackBaseConf, {
     }
   },
   plugins: [
-    //instead of file-loader because ejs template 
     // new CopyWebpackPlugin([
     //   {
     //     from: path.resolve(__dirname, '../static'),
@@ -43,6 +46,12 @@ module.exports = merge(webpackBaseConf, {
     //     ignore: ['.*']
     //   }
     // ]),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: utils.assetsPath("css/[name].[contenthash].css"),
+      chunkFilename: utils.assetsPath("css/[name].[contenthash].css")
+    }),
     new BundleAnalyzerPlugin()
   ],
 });
