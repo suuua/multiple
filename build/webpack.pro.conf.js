@@ -15,7 +15,7 @@ module.exports = merge(webpackBaseConf, {
     chunkFilename: utils.assetsPath("js/[name].[chunkhash].js"),
   },
   module: {
-    rules: utils.styleLoaders({ sourceMap: false, usePostCSS: false, extract: true })
+    rules: utils.styleLoaders({ sourceMap: false, usePostCSS: false, extract: true, minimize: true })
   },
   optimization: {
     runtimeChunk: "single",
