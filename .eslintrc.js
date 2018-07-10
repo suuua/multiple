@@ -1,6 +1,7 @@
 module.exports = {
     // 此为根配置，不再向上寻找
     root: true,
+    parser: 'babel-eslint',
     parserOptions: {
         // 想要使用的 ECMAScript 版本
         ecmaVersion: 7,
@@ -9,6 +10,7 @@ module.exports = {
     },
     env: {
       browser: true,
+      es6: true
     },
     extends: "eslint:recommended",
     rules: {
