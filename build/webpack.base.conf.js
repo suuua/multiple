@@ -65,6 +65,8 @@ module.exports = {
   ],
   module: {
     rules: [
+      // Because of use the ejs template engin and get the assets path,
+      // we must use the file-loader to load the file in the static catalog 
       {
         test: /static/,
         loader: 'file-loader',
@@ -77,7 +79,7 @@ module.exports = {
           }
         }
       }, {
-        test: /src.+\.(js)$/,
+        test: utils.loaderReg("\\.js$"),
         loader: 'eslint-loader',
         enforce: 'pre',
         include: [SOURCE],
@@ -85,24 +87,24 @@ module.exports = {
           formatter: require('eslint-friendly-formatter')
         }
       }, {
-        test: /\.html$/,
+        test: utils.loaderReg("\\.html$"),
         loader: 'html-loader',
         options: {
           minimize: true,
         } 
       }, {
-        test: /src.+\.js$/,
+        test: utils.loaderReg("\\.js$"),
         loader: 'babel-loader',
         include: [SOURCE]
       }, {
-        test: /src.+\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: utils.loaderReg("\\.(png|jpe?g|gif|svg)(\\?.*)?$"),
         loader: 'url-loader',
         options: {
           limit: 10000,
           name: utils.assetsPath("img/[name].[hash:7].[ext]")
         }
       }, { 
-        test: /\.ejs$/, 
+        test: utils.loaderReg("\\.ejs$"),
         loader: "ejs-loader",
         options: {
           minimize: true,

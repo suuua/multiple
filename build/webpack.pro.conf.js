@@ -39,6 +39,7 @@ module.exports = merge(webpackBaseConf, {
     }
   },
   plugins: [
+  
     // new CopyWebpackPlugin([
     //   {
     //     from: path.resolve(__dirname, '../static'),

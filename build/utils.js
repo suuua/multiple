@@ -94,10 +94,18 @@ exports.styleLoaders = function (options) {
   for (const extension in loaders) {
     const loader = loaders[extension]
     output.push({
-      test: new RegExp('src.+\\.' + extension + '$'),
+      test: exports.loaderReg('\\.' + extension + '$'),
       use: loader
     })
   }
 
   return output
+}
+
+exports.loaderReg = function (str) {
+  return function (path) {
+    var reg1 = /[\\/]static[\\/]/;
+    var reg2 = new RegExp(str);
+    return !reg1.test(path) && reg2.test(path);
+  };
 }
