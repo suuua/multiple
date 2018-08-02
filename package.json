@@ -1,25 +1,28 @@
 {
-  "name": "xianliao-shop-app.back",
+  "name": "xxx",
   "version": "1.0.0",
-  "description": "",
+  "description": "xxx",
   "main": ".eslintrc.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/dev.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "unit": "jest --config test/unit/jest.conf.js --coverage"
   },
-  "author": "",
+  "author": "xxx",
   "license": "ISC",
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",
+    "babel-jest": "^23.4.2",
     "babel-loader": "^7.1.4",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.11",
+    "ejs": "^2.6.1",
     "ejs-loader": "^0.3.1",
     "eslint": "^4.19.1",
     "eslint-friendly-formatter": "^4.0.1",
@@ -29,12 +32,18 @@
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
     "http-proxy-middleware": "^0.18.0",
+    "jest": "^23.4.1",
+    "jest-vue-preprocessor": "^1.4.0",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.1",
     "rimraf": "^2.6.2",
     "style-loader": "^0.21.0",
     "url-loader": "^1.0.1",
+    "vue-jest": "^2.6.0",
+    "vue-loader": "^15.2.5",
+    "vue-style-loader": "^4.1.1",
+    "vue-template-compiler": "^2.5.16",
     "webpack": "^4.12.0",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-dev-middleware": "^3.1.3",
@@ -44,6 +53,6 @@
   "dependencies": {
     "babel-runtime": "^6.26.0",
     "echarts": "^4.1.0",
-    "ejs": "^2.6.1"
+    "vue": "^2.5.16"
   }
 }

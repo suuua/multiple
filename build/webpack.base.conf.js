@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const utils = require('./utils.js');
 const config = require('../config/index.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const entryMap = {};
 const SOURCE = utils.resolve('../src/');
@@ -32,9 +32,11 @@ utils.interatorFolderFile(HTML_FLOADER, (name, dir) => {
 // 生成html模板文件
 console.log(entryMap, htmlFile);
 Object.keys(htmlFile).forEach(name => {
-  let chunks = [/*utils.assetsPath("vendor")*/"runtime", "vendors", "common"];
+  let chunks = ["runtime", "vendors", "common"];
   let filename = path.relative(HTML_FLOADER, path.resolve(htmlFile[name]));
-  let appChunk = path.posix.join(...path.relative(HTML_FLOADER, htmlFile[name]).replace(allowHtmlFileExt, "").split(path.sep));
+  let appChunk = path.posix.join(...path.relative(HTML_FLOADER, htmlFile[name])
+    .replace(allowHtmlFileExt, "")
+    .split(path.sep));
 
   if (entryMap[appChunk]) { chunks.push(appChunk); }
   console.log(name, filename, chunks);
@@ -53,20 +55,24 @@ module.exports = {
     publicPath: config.dev.assetsPublicPath
   },
   resolve: {
+    extensions: ['.js', '.vue', '.json'],
     alias: {
+      'vue$': 'vue/dist/vue.esm.js',
       '@': path.resolve(__dirname, "..", 'src')
     }
   },
   plugins: [
     ...htmlWebpackPlugins,
-    new webpack.ProvidePlugin({
-        _: "lodash"
-    })
+    new VueLoaderPlugin()
   ],
   module: {
     rules: [
       // Because of use the ejs template engin and get the assets path,
       // we must use the file-loader to load the file in the static catalog 
+      {
+        test: utils.loaderReg("\\.vue$"),
+        loader: 'vue-loader',
+      },
       {
         test: /static/,
         loader: 'file-loader',
@@ -79,7 +85,7 @@ module.exports = {
           }
         }
       }, {
-        test: utils.loaderReg("\\.js$"),
+        test: utils.loaderReg("\\.(js|vue)$"),
         loader: 'eslint-loader',
         enforce: 'pre',
         include: [SOURCE],

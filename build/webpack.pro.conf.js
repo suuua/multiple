@@ -22,7 +22,8 @@ module.exports = merge(webpackBaseConf, {
     splitChunks: {
       chunks: 'all',
       minSize: 0,
-      minChunks: 1,
+      // 因为前期文件少先写死一个数字，后续文件多后 按25~50%的 使用率
+      minChunks: 2,// Math.ceil(Object.keys(webpackBaseConf.entry).length / 4),
       name: true,
       cacheGroups: {
         vendors: {
