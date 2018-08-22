@@ -30,7 +30,6 @@ utils.interatorFolderFile(HTML_FLOADER, (name, dir) => {
   }
 });
 // 生成html模板文件
-console.log(entryMap, htmlFile);
 Object.keys(htmlFile).forEach(name => {
   let chunks = ["runtime", "vendors", "common"];
   let filename = path.relative(HTML_FLOADER, path.resolve(htmlFile[name]));
@@ -39,7 +38,6 @@ Object.keys(htmlFile).forEach(name => {
     .split(path.sep));
 
   if (entryMap[appChunk]) { chunks.push(appChunk); }
-  console.log(name, filename, chunks);
   htmlWebpackPlugins.push(new HtmlWebpackPlugin({
     filename: filename.replace(/\.\w+$/, ".html"),
     template: htmlFile[name],
