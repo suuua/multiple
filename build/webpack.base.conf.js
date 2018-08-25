@@ -91,7 +91,9 @@ module.exports = {
           formatter: require('eslint-friendly-formatter')
         }
       }, {
-        test: utils.loaderReg("\\.html$"),
+        test: function (path) {
+          return utils.loaderReg("\\.html$")(path) && !path.match(/[\\/]src[\\/]html/);
+        },
         loader: 'html-loader',
         options: {
           minimize: true,
