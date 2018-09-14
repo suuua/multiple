@@ -51,9 +51,24 @@ exports.cssLoaders = function (options) {
     }
   }
 
+  const fileLoader = {
+    loader: "file-loader",
+    options: {
+      name: options.filename || exports.assetsPath("[name].[hash:7].[ext]")
+    }
+  };
+
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    //const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    
+    let loaders = [];
+    if (options.usePostCSS) {
+      loaders = [postcssLoader].concat(loaders);
+    }
+    if (!options.file) {
+      loaders = [cssLoader].concat(loaders);
+    }
 
     if (loader) {
       loaders.push({
@@ -70,6 +85,8 @@ exports.cssLoaders = function (options) {
       return [{
         loader: MiniCssExtractPlugin.loader,
       }].concat(loaders)
+    } else if (options.file) {
+      return [fileLoader].concat(loaders);
     } else {
       return ['style-loader'].concat(loaders)
     }
@@ -94,7 +111,8 @@ exports.styleLoaders = function (options) {
   for (const extension in loaders) {
     const loader = loaders[extension]
     output.push({
-      test: exports.loaderReg('\\.' + extension + '$'),
+      test: new RegExp('\\.' + extension + '$'),
+      issuer: options.issuer || undefined,
       use: loader
     })
   }

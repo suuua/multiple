@@ -18,7 +18,18 @@ Object.keys(webpackBaseConf.entry).forEach(function (name) {
 module.exports = merge(webpackBaseConf, {
   mode: "development",
   module: {
-    rules: utils.styleLoaders({ sourceMap: false, usePostCSS: false })
+    rules: utils.styleLoaders({ 
+      sourceMap: false, 
+      usePostCSS: false,
+      issuer: (path) => {
+        return !path.match(/[\\/]src[\\/]html/);
+      }
+    }).concat(utils.styleLoaders({ // 此处是为了支持直接在html文件中引入css文件
+      sourceMap: false, 
+      usePostCSS: false, 
+      file: true, 
+      issuer: /[\\/]src[\\/]html/ 
+    }))
   },
   plugins: [
     //https://github.com/glenjamin/webpack-hot-middleware#installation--usage

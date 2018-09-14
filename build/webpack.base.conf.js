@@ -68,10 +68,9 @@ module.exports = {
       // Because of use the ejs template engin and get the assets path,
       // we must use the file-loader to load the file in the static catalog 
       {
-        test: utils.loaderReg("\\.vue$"),
+        test: new RegExp("\\.vue$"),
         loader: 'vue-loader',
-      },
-      {
+      }, /*{
         test: /static/,
         loader: 'file-loader',
         options: {
@@ -82,8 +81,8 @@ module.exports = {
             );
           }
         }
-      }, {
-        test: utils.loaderReg("\\.(js|vue)$"),
+      },*/ {
+        test: new RegExp("\\.(js|vue)$"),
         loader: 'eslint-loader',
         enforce: 'pre',
         include: [SOURCE],
@@ -92,29 +91,39 @@ module.exports = {
         }
       }, {
         test: function (path) {
-          return utils.loaderReg("\\.html$")(path) && !path.match(/[\\/]src[\\/]html/);
+          return new RegExp("\\.html$").test(path) && !path.match(/[\\/]src[\\/]html/);
         },
         loader: 'html-loader',
         options: {
           minimize: true,
         } 
       }, {
-        test: utils.loaderReg("\\.js$"),
+        test: new RegExp("\\.js$"),
         loader: 'babel-loader',
         include: [SOURCE]
       }, {
-        test: utils.loaderReg("\\.(png|jpe?g|gif|svg)(\\?.*)?$"),
+        test: new RegExp("\\.(png|jpe?g|gif|svg)(\\?.*)?$"),
         loader: 'url-loader',
         options: {
           limit: 10000,
           name: utils.assetsPath("img/[name].[hash:7].[ext]")
         }
       }, { 
-        test: utils.loaderReg("\\.ejs$"),
-        loader: "ejs-loader",
-        options: {
-          minimize: true,
-        } 
+        test: new RegExp("\\.ejs$"),
+        use: [{
+          loader: "ejs-loader",
+          options: {
+            minimize: true,
+          }
+        },
+        // 下面两个loader是为了先用 html-loader去解析文件中引用了的静态路径资源的路径
+        "extract-loader",
+        {
+          loader: "html-loader",
+          options: {
+            attrs: ['img:src', 'link:href']
+          }
+        }]
       }
     ]
   }

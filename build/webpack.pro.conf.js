@@ -15,7 +15,22 @@ module.exports = merge(webpackBaseConf, {
     chunkFilename: utils.assetsPath("js/[name].[chunkhash].js"),
   },
   module: {
-    rules: utils.styleLoaders({ sourceMap: false, usePostCSS: false, extract: true, minimize: true })
+    rules: utils.styleLoaders({ 
+      sourceMap: false, 
+      usePostCSS: false, 
+      extract: true, 
+      minimize: true,
+      issuer: (path) => {
+        return !path.match(/[\\/]html/);
+      }
+    }).concat(utils.styleLoaders({  // 此处是为了支持直接在html文件中引入css文件
+      sourceMap: false, 
+      usePostCSS: false, 
+      file: true, 
+      minimize: true,
+      issuer: /[\\/]html/,
+      filename: utils.assetsPath("css/[name].[hash:7].[ext]"),
+    }))
   },
   optimization: {
     runtimeChunk: "single",
