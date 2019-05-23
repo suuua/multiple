@@ -127,3 +127,17 @@ exports.loaderReg = function (str) {
     return !reg1.test(path) && reg2.test(path);
   };
 }
+
+
+exports.hasPath = function(filePathArr, filepath) {
+  let m = "\\", r = "/";
+  // 兼容linux环境
+  if (path.sep === m) { [m, r] = [r, m]; } 
+  for (let i = 0; i < filePathArr.length; i++) {
+    let value = filePathArr[i];
+    if (value && (filepath.includes(value) || filepath.includes(value.replace(m, r)))) {
+      return true;
+    }
+  }
+  return false;
+}

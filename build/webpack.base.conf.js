@@ -11,12 +11,35 @@ const WEBPACK_ENTRY_FLOADER_NAME = "entry";
 const WEBPACK_ENTRY_FLOADER = path.resolve(SOURCE, "./" + WEBPACK_ENTRY_FLOADER_NAME);
 const HTML_FLOADER = path.resolve(SOURCE, "./html");
 
+/**
+ * 获取输入参数
+ * 优化HMR性能, HtmlWebpackPlugin 在多页应用页面较多时，会消耗大量性能，这里开发哪个页面就build哪个页面
+ * 此处注意匹配的是路径中是否存在关键字，在某些情况下，例如about, 如果项目名称包含about关键字，
+ * 所以所有文件路径都会包含about关键字，此时建议使用‘/about’来替代
+ */
+let argvLen = process.argv.length;
+let argv = [];
+if (argvLen > 2) {
+  for (let i = 2; i < argvLen; i++) {
+    // 去除文件后缀
+    argv.push(process.argv[i].replace(/\..*$/, ""));
+  }
+}
+
 utils.interatorFolderFile(WEBPACK_ENTRY_FLOADER, (name, dir) => {
   let filePath = path.resolve(dir, "./" + name);
   // chunks 需要与html结构一一对应才能找到依赖模块
   let chunks = path.posix.join(...path.relative(WEBPACK_ENTRY_FLOADER, filePath).replace(".js", "").split(path.sep));
-  entryMap[chunks] = filePath;
+
+  if (argvLen > 2) {
+    if (utils.hasPath(argv, filePath)) {
+      entryMap[chunks] = filePath;
+    }
+  } else {
+    entryMap[chunks] = filePath;
+  }
 });
+
 // 获取入口文件
 let htmlWebpackPlugins = [];
 let htmlFile = {};
@@ -26,9 +49,17 @@ utils.interatorFolderFile(HTML_FLOADER, (name, dir) => {
   if (allowHtmlFileExt.test(name)) {
     let filePath = path.resolve(dir, "./" + name);
     let fileName = path.relative(HTML_FLOADER, filePath);
-    htmlFile[fileName] = filePath;
+
+    if (argvLen > 2) {
+      if (utils.hasPath(argv, filePath)) {
+        htmlFile[fileName] = filePath;
+      }
+    } else {
+      htmlFile[fileName] = filePath;
+    }
   }
 });
+
 // 生成html模板文件
 Object.keys(htmlFile).forEach(name => {
   let chunks = ["runtime", "vendors", "common"];
@@ -42,7 +73,13 @@ Object.keys(htmlFile).forEach(name => {
     filename: filename.replace(/\.\w+$/, ".html"),
     template: htmlFile[name],
     chunks: chunks,
-    minify: true
+    minify: true,
+    /**
+     * Emit the file only if it was changed, 
+     * if set false the HtmlWebpackPlugin consume a lot of performance in HMR model
+     * open it the HMR is still very slow
+     */
+    cache: true
   }));
 });
 module.exports = {
